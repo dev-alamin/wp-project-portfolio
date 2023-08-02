@@ -1,0 +1,95 @@
+body {
+    position: relative;
+    color: #555;
+  }
+  
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    font-family: "Paytone One", "Arial Black", Helvetica, sans-serif;
+    color: #7f7b9c;
+    font-weight: bold;
+    text-align: center;
+    letter-spacing: 3px;
+    margin: 20px 0;
+  }
+  
+  h5 {
+    color: #555;
+  }
+  
+  p {
+    font-family: "Merriweather Sans", Geneva, Tahoma, Verdana, sans-serif;
+    font-weight: 100;
+    font-size: 0.9rem;
+    text-align: center;
+    margin: 30px 0;
+    letter-spacing: 1.5px;
+    line-height: 1.7rem;
+  }
+  
+  button {
+    text-align: center;
+    display: block;
+    margin: 50px auto;
+    padding: 5px 20px;
+    background-color: #fff;
+    border: 1px solid #797979;
+    color: #7f7b9c;
+    font-family: "Paytone One", "Arial Black", Helvetica, sans-serif;
+    text-transform: none;
+    letter-spacing: 3px;
+    font-size: 1.2rem;
+  }
+  
+
+  .portfolio-single-project {
+    position: relative;
+}
+
+.portfolio-single-project .text {
+    position: absolute;
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+    z-index: 9;
+    visibility: hidden;
+    opacity: 0;
+    transition: .3s;
+}
+.portfolio-single-project .text .project-title{
+    color: #fff;;
+}
+.portfolio-single-project .text a.content-readmore {
+    color: #333;
+    background: #fff;
+    padding: 7px;
+    border-radius: 3px;
+    margin-top: 15px;
+}
+.portfolio-single-project:after {
+    content: "";
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: linear-gradient(178.1deg, rgb(60, 55, 106) 8.5%, rgb(23, 20, 69) 82.4%);
+    opacity: .7;
+    z-index: 1;
+    transition: .3s;
+    visibility: hidden;
+    opacity: 0;
+}
+
+.portfolio-single-project:hover:after {
+    visibility: visible;
+    opacity: .7;
+}
+
+.portfolio-single-project:hover .text {
+    visibility: visible;
+    opacity: 1;
+}

@@ -131,6 +131,11 @@ final class WP_Project_Portfolio {
     public function init() {
         load_plugin_textdomain( 'wp-project-portfolio', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
         new \WPPP\CPT();
+        new \WPPP\Project_Tax();
+        new \WPPP\Admin_Column();
+        new \WPPP\Page_Template();
+
+        new \WPPP\Frontend();
 
         $this->load_admin_hooks();
         $this->load_frontend_hooks();
