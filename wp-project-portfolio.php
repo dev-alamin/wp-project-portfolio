@@ -192,3 +192,17 @@ function WPPP_plugin_init() {
 
 // Initialize the plugin.
 WPPP_plugin_init();
+
+function custom_portfolio_excerpt_length( $length ) {
+    if ( is_singular( 'portfolio_project' ) ) {
+        return 30; // Change this number to the desired word count for the excerpt
+    } else {
+        return $length;
+    }
+}
+add_filter( 'excerpt_length', 'custom_portfolio_excerpt_length' );
+
+function custom_portfolio_excerpt_more( $more ) {
+    return ''; // Remove the square symbols ([...])
+}
+add_filter( 'excerpt_more', 'custom_portfolio_excerpt_more' );

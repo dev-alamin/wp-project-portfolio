@@ -47,49 +47,72 @@ body {
 
   .portfolio-single-project {
     position: relative;
+    margin-bottom: 20px;
 }
 
 .portfolio-single-project .text {
     position: absolute;
-    color: #fff;
-    padding: 10px;
+    height:0;
+    width: 100%;
+    background: rgba(0,0,0,0.5);
     text-align: center;
-    z-index: 9;
-    visibility: hidden;
-    opacity: 0;
-    transition: .3s;
+    padding: 10px;
+    transition: .4s;
+    overflow: hidden;
+    padding: 0;
+}
+.portfolio-single-project:hover .text {
+    height: 100%;
+    padding: 10px;
 }
 .portfolio-single-project .text .project-title{
     color: #fff;;
 }
-.portfolio-single-project .text a.content-readmore {
-    color: #333;
-    background: #fff;
-    padding: 7px;
+.portfolio-single-project .text p{
+    color: #fff;
+}
+.portfolio-single-project .text .open-popup {
+    color: #fff;
+    background: transparent;
+    padding: 7px 15px;
     border-radius: 3px;
-    margin-top: 15px;
-}
-.portfolio-single-project:after {
-    content: "";
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    background: linear-gradient(178.1deg, rgb(60, 55, 106) 8.5%, rgb(23, 20, 69) 82.4%);
-    opacity: .7;
-    z-index: 1;
+    border: 1px solid;
+    margin-top: 20px;
+    display: inline-block;
     transition: .3s;
-    visibility: hidden;
-    opacity: 0;
 }
 
-.portfolio-single-project:hover:after {
-    visibility: visible;
-    opacity: .7;
+.portfolio-single-project .text .open-popup:hover {
+    background: #fff;
+    color: #333;
 }
 
-.portfolio-single-project:hover .text {
-    visibility: visible;
-    opacity: 1;
+.portfolio-single-project .thumb {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 325px;
+}
+.fancybox__caption h4 {
+    color: #fff;
+}
+
+.fancybox__caption p a {
+    display: block;
+    background: transparent;
+    width: 120px;
+    border-radius: 3px;
+    border: 1px solid;
+    color: #fff;
+    margin: 15px auto;
+}
+
+.project-portfolio-wrapper .button-group {
+    margin-bottom: 20px;
+    border-bottom: 1px solid;
+}
+
+.project-portfolio-wrapper .button-group button {
+    background: transparent;
+    margin-right: 5px;
 }

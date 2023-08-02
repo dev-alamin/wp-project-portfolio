@@ -13,15 +13,11 @@ jQuery(document).ready(function($) {
     var filterValue = $(this).attr('data-filter');
     $grid.isotope({ filter: filterValue });
     });
-
-    // Initialize FancyBox
-    $('[data-fancybox="gallery"]').fancybox({
-        // Options here (if needed)
-       });
-
        
 });
 
-Fancybox.bind('[data-fancybox="gallery"]', {
-    //
+Fancybox.bind('[data-fancybox]', {
+    thumbs : {
+        autoStart : true
+      }
   });  

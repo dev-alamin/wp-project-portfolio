@@ -12,6 +12,30 @@ get_header(); ?>
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
+
+                <select id="sort-by-title">
+                    <option value="asc">Sort by Title (A-Z)</option>
+                    <option value="desc">Sort by Title (Z-A)</option>
+                </select>
+
+                <select id="sort-by-category">
+                    <option value="all">All Categories</option>
+                    
+                    <?php
+                        $categories = get_terms(array(
+                        'taxonomy' => 'project_cat', // Replace 'project_cat' with your custom taxonomy slug
+                        'hide_empty' => true,
+                        ));
+
+                    if (!empty($categories) && !is_wp_error($categories)) {
+                        foreach ($categories as $category) {
+                        echo '<option value="' . esc_attr($category->slug) . '">' . esc_html($category->name) . '</option>';
+                        }
+                    }
+                    ?>
+                </select>
+
+
                 <div class="button-group" data-filter-group="color">
                     <button data-filter="">All</button>
                     <?php
@@ -67,23 +91,31 @@ get_header(); ?>
                                     <?php
                                     $post = get_post( $project_id );
                                     setup_postdata( $post ); ?>
-                                    <a data-fancybox="gallery" href="<?php echo get_the_post_thumbnail_url(get_the_ID(), 'large'); ?>" 
-                                    data-caption='
-                                    <h4><?php echo get_the_title(get_the_ID()); ?></h4>
-                                    <a class="readmore" 
-                                        href="<?php echo esc_url( get_the_permalink(get_the_ID() ) ); ?>">
-                                        <?php _e( 'Read more', 'wp-project-portfolio' ); ?>
-                                    </a>'>
-                                    <?php 
-                                        echo '<div class="text">';
-                                        the_title( '<h4 class="project-title">', '</h4>' );
-                                        echo '<a class="content-readmore" href="'. get_the_permalink( get_the_ID() ) . '">' . __( 'Read more', 'wp-project-portfolio' ) . '</a>';
-                                        echo '</div>';
-                                        the_post_thumbnail( 'medium' );
+                                    <?php
+                                    $caption = '<h4>' . get_the_title(get_the_ID()) . '</h4>';
+                                    $caption .= '<p>' . get_the_excerpt( get_the_ID() );
+                                    $caption .= '<a class="readmore" href="' . esc_url( get_the_permalink(get_the_ID() ) ) . '">';
+                                    $caption .= __( 'Read more', 'wp-project-portfolio' );
+                                    $caption .= '</a>';
 
-                                    wp_reset_postdata();
+                                    $remove_cont_tags = wp_strip_all_tags( get_the_excerpt() );
+                                    $shorter_cont = wp_trim_words( $remove_cont_tags, 8, '' );
                                     ?>
+
+                                    <a class="data-fancybox-trigger"
+                                    data-fancybox
+                                    href="<?php echo get_the_post_thumbnail_url(get_the_ID(), 'large'); ?>" 
+                                    data-caption='<?php echo $caption; ?>'>
+                                    <div class="text">
+                                        <?php the_title( '<h4 class="project-title">', '</h4>' ); ?>
+                                        <p><?php echo esc_html__( $shorter_cont ); ?></p>
+                                        <span class="open-popup"><?php _e( 'View', 'wp-project-portfolio' ); ?></span>
+                                    </div>
+                                    <div class="thumb" style="background-image: url(<?php echo get_the_post_thumbnail_url(get_the_ID(), 'large') ?>);">
+
+                                    </div>
                                     </a>
+
                                 </div>
                             </div>
                             <?php

@@ -65,7 +65,7 @@ WP Project Portfolio is licensed under the [GPLv2 or later](https://www.gnu.org/
 
 ## Credits
 
-WP Project Portfolio was developed by [Your Name](https://yourwebsite.com) and is based on the WordPress platform.
+WP Project Portfolio was developed by [Al Amin](https://https://almn.me) and is based on the WordPress platform.
 
 ---
 

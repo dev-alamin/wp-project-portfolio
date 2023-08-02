@@ -28,11 +28,6 @@ class Assets {
                 'version' => fileatime( WPPP_PLUGIN_PATH . 'assets/js/bootstrap.bundle.min.js' ),
                 'deps'    => [ 'jquery' ],
             ],
-            'fancybox-esm-script' => [
-                'src'     => WPPP_PLUGIN_URL . 'assets/js/fancybox.esm.js',
-                'version' => fileatime( WPPP_PLUGIN_PATH . 'assets/js/fancybox.esm.js' ),
-                'deps'    => [ 'jquery' ],
-            ],
             'fancybox-umd-script' => [
                 'src'     => WPPP_PLUGIN_URL . 'assets/js/fancybox.umd.js',
                 'version' => fileatime( WPPP_PLUGIN_PATH . 'assets/js/fancybox.umd.js' ),
@@ -56,7 +51,7 @@ class Assets {
             'portfolio-script' => [
                 'src'     => WPPP_PLUGIN_URL . 'assets/js/frontend.js',
                 'version' => fileatime( WPPP_PLUGIN_PATH . 'assets/js/frontend.js' ),
-                'deps'    => [ 'jquery', 'masonary-pkgd', 'fancybox-umd-script', 'fancybox-esm-script', 'isotope-pkgd' ],
+                'deps'    => [ 'jquery', 'masonary-pkgd', 'fancybox-umd-script', 'isotope-pkgd' ],
             ],
         ];
     }
