@@ -36,28 +36,35 @@ get_header(); ?>
                 </select>
 
 
-                <div class="button-group" data-filter-group="color">
-                    <button data-filter="">All</button>
+                <div class="button-group mt-3" data-filter-group="color">
+                    
                     <?php
                     $args = array(
                         'post_type'      => 'portfolio_project',
                         'post_status'    => 'publish',
-                        'posts_per_page' => -1,
+                        'posts_per_page' => 15,
                     );
 
                     $project = new WP_Query( $args );
 
                     $unique_categories = array();
                     $project_ids = array(); // Store post IDs here
+                    $category_counts = [];
 
                     if ( $project->have_posts() ) {
                         while ( $project->have_posts() ) {
                             $project->the_post();
                             $terms = get_the_terms( get_the_ID(), 'project_cat' ); // Replace 'project_cat' with your custom taxonomy slug
-
+                           
                             if ( ! empty( $terms ) && ! is_wp_error( $terms ) ) {
                                 foreach ( $terms as $term ) {
                                     $unique_categories[ $term->slug ] = $term->name;
+
+                                    if ( isset( $category_counts[ $term->slug ] ) ) {
+                                        $category_counts[ $term->slug ]++;
+                                    } else {
+                                        $category_counts[ $term->slug ] = 1;
+                                    }
                                 }
                             }
 
@@ -67,16 +74,20 @@ get_header(); ?>
                         wp_reset_postdata();
                     }
 
+                    echo '<button class="active" data-filter="">' . __( 'All - ' . array_sum($category_counts), 'wp-project-portfolio') . '</button>';
+
                     if ( ! empty( $unique_categories ) ) {
                         foreach ( $unique_categories as $category_slug => $category_name ) {
-                            echo '<button data-filter=".' . esc_attr( $category_slug ) . '">' . esc_html( $category_name ) . '</button>';
+                            $category_count = $category_counts[ $category_slug ];
+
+                            echo '<button data-filter=".' . esc_attr( $category_slug ) . '">' . esc_html( $category_name ) . ' (' . __($category_count) . ')' . '</button>';
                         }
                     }
                     ?>
                 </div>
             </div>
         </div>
-        <div class="row project-content">
+        <div class="row project-content" id="project-content">
             <?php
             // Use stored post IDs to fetch the post content
             if ( ! empty( $project_ids ) ) {
@@ -106,14 +117,14 @@ get_header(); ?>
                                     data-fancybox
                                     href="<?php echo get_the_post_thumbnail_url(get_the_ID(), 'large'); ?>" 
                                     data-caption='<?php echo $caption; ?>'>
-                                    <div class="text">
-                                        <?php the_title( '<h4 class="project-title">', '</h4>' ); ?>
-                                        <p><?php echo esc_html__( $shorter_cont ); ?></p>
-                                        <span class="open-popup"><?php _e( 'View', 'wp-project-portfolio' ); ?></span>
-                                    </div>
-                                    <div class="thumb" style="background-image: url(<?php echo get_the_post_thumbnail_url(get_the_ID(), 'large') ?>);">
+                                        <div class="text">
+                                            <?php the_title( '<h4 class="project-title">', '</h4>' ); ?>
+                                            <p><?php echo esc_html__( $shorter_cont ); ?></p>
+                                            <span class="open-popup"><?php _e( 'View', 'wp-project-portfolio' ); ?></span>
+                                        </div>
+                                        <div class="thumb" style="background-image: url(<?php echo get_the_post_thumbnail_url(get_the_ID(), 'large') ?>);">
 
-                                    </div>
+                                        </div>
                                     </a>
 
                                 </div>
@@ -127,6 +138,7 @@ get_header(); ?>
             }
             ?>
         </div>
+        <button id="load-more-button" class="mb-5">Load More</button>
     </div>
 </div>
 <?php 

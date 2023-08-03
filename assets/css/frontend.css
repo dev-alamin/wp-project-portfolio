@@ -116,3 +116,12 @@ body {
     background: transparent;
     margin-right: 5px;
 }
+
+.project-portfolio-wrapper .button-group button.active {
+    background: black;
+    color: #fff;
+}
+.fancybox__caption p {
+    max-width: 1200px;
+    padding: 0 20px;
+}

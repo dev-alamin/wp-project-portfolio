@@ -134,8 +134,10 @@ final class WP_Project_Portfolio {
         new \WPPP\Project_Tax();
         new \WPPP\Admin_Column();
         new \WPPP\Page_Template();
-
-        new \WPPP\Frontend();
+        
+        if(defined( 'DOING_AJAX') && DOING_AJAX ) {
+            new \WPPP\Ajax();
+        }
 
         $this->load_admin_hooks();
         $this->load_frontend_hooks();
@@ -148,7 +150,7 @@ final class WP_Project_Portfolio {
      */
     private function load_admin_hooks() {
         if ( is_admin() ) {
-            // Add admin-specific hooks here.
+
             $plugin_file = plugin_basename( __FILE__ );
             new WPPP\Admin\Action_Link( $plugin_file );
         }
@@ -161,7 +163,8 @@ final class WP_Project_Portfolio {
      */
     private function load_frontend_hooks() {
         if ( ! is_admin() ) {
-            // Add frontend-specific hooks here.
+            new \WPPP\Frontend();
+
         }
     }
 
@@ -192,17 +195,3 @@ function WPPP_plugin_init() {
 
 // Initialize the plugin.
 WPPP_plugin_init();
-
-function custom_portfolio_excerpt_length( $length ) {
-    if ( is_singular( 'portfolio_project' ) ) {
-        return 30; // Change this number to the desired word count for the excerpt
-    } else {
-        return $length;
-    }
-}
-add_filter( 'excerpt_length', 'custom_portfolio_excerpt_length' );
-
-function custom_portfolio_excerpt_more( $more ) {
-    return ''; // Remove the square symbols ([...])
-}
-add_filter( 'excerpt_more', 'custom_portfolio_excerpt_more' );

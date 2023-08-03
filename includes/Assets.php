@@ -127,8 +127,10 @@ class Assets {
                 wp_reset_postdata();
             }
 
-            wp_localize_script('portfolio-script', 'isotopeSettings', array(
+            wp_localize_script('portfolio-script', 'portofolioObject', array(
                 'uniqueClassSlugs' => array_keys($unique_categories),
+                'adminUrl'      => admin_url('admin-ajax.php'),
+                'nonce' => wp_create_nonce( 'project_porfoltio_nonce'),
             ));
         }
     }
