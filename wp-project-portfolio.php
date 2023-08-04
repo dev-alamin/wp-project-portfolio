@@ -29,6 +29,7 @@ function wp_project_portfolio_autoloader( $class ) {
     $base_dir  = __DIR__ . '/includes/';
 
     $class = ltrim( $class, '\\' );
+
     if ( strpos( $class, $namespace . '\\' ) === 0 ) {
         $relative_class = substr( $class, strlen( $namespace . '\\' ) );
         $file           = $base_dir . str_replace( '\\', '/', $relative_class ) . '.php';
@@ -153,6 +154,8 @@ final class WP_Project_Portfolio {
 
             $plugin_file = plugin_basename( __FILE__ );
             new WPPP\Admin\Action_Link( $plugin_file );
+            new \WPPP\Admin\Menu();
+            new \WPPP\Admin\Save_Settings();
         }
     }
 

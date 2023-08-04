@@ -7,13 +7,26 @@ class Component{
      *
      * @return string The caption HTML.
      */
-    public function caption(){
-        $caption = '<h4>' . get_the_title(get_the_ID()) . '</h4>';
-        $caption .= '<p>' . get_the_excerpt( get_the_ID() );
+    public function caption(): string{
+        $caption = '<h4>' .esc_html__( get_the_title(get_the_ID() ) ) . '</h4>';
+        $caption .= '<p>' . esc_html__($this->short_description( 50 ) );
         $caption .= '<a class="readmore" href="' . esc_url( get_the_permalink(get_the_ID() ) ) . '">';
         $caption .= __( 'Read more', 'wp-project-portfolio' );
         $caption .= '</a>';
         return $caption;
+    }
+
+    /**
+     * Generate shorter version of the_content()
+     *
+     * @param integer $words
+     * @return string
+     */
+    private function short_description( int $words = 10 ): string {
+        $remove_cont_tags = wp_strip_all_tags( get_the_content() );
+        $shorter_cont = wp_trim_words( $remove_cont_tags, $words, '' );
+
+        return $shorter_cont;
     }
 
     /**
@@ -23,12 +36,9 @@ class Component{
      * @return string The content HTML.
      */
     public function content(){
-        $remove_cont_tags = wp_strip_all_tags( get_the_excerpt() );
-        $shorter_cont = wp_trim_words( $remove_cont_tags, 8, '' );
-
         $content = '<div class="text">';
         $content .= '<h4 class="project-title">' . get_the_title(get_the_ID()) . '</h4>';
-        $content .= '<p>' . esc_html__($shorter_cont) . '</p>';
+        $content .= '<p>' . esc_html__( $this->short_description() ) . '</p>';
         $content .= '<span class="open-popup">' . __('View', 'wp-project-portfolio') . '</span>';
         $content .= '</div>';
         return $content;
@@ -87,32 +97,37 @@ class Component{
         <?php
     }
 
-    public function loop(){
+    /**
+     * Retrieve project loop data including unique categories, project IDs, and category counts.
+     *
+     * @return array Associative array containing categories, project IDs, and category counts.
+     */
+    public function loop() {
         $args = array(
             'post_type'      => 'portfolio_project',
             'post_status'    => 'publish',
             'posts_per_page' => 15,
         );
 
-        $project = new \WP_Query( $args );
+        $project = new \WP_Query($args);
 
         $unique_categories = array();
         $project_ids = array(); // Store post IDs here
         $category_counts = [];
 
-        if ( $project->have_posts() ) {
-            while ( $project->have_posts() ) {
+        if ($project->have_posts()) {
+            while ($project->have_posts()) {
                 $project->the_post();
-                $terms = get_the_terms( get_the_ID(), 'project_cat' );
-               
-                if ( ! empty( $terms ) && ! is_wp_error( $terms ) ) {
-                    foreach ( $terms as $term ) {
-                        $unique_categories[ $term->slug ] = $term->name;
+                $terms = get_the_terms(get_the_ID(), 'project_cat');
 
-                        if ( isset( $category_counts[ $term->slug ] ) ) {
-                            $category_counts[ $term->slug ]++;
+                if (!empty($terms) && !is_wp_error($terms)) {
+                    foreach ($terms as $term) {
+                        $unique_categories[$term->slug] = $term->name;
+
+                        if (isset($category_counts[$term->slug])) {
+                            $category_counts[$term->slug]++;
                         } else {
-                            $category_counts[ $term->slug ] = 1;
+                            $category_counts[$term->slug] = 1;
                         }
                     }
                 }
@@ -120,13 +135,33 @@ class Component{
                 // Store post IDs
                 $project_ids[] = get_the_ID();
             }
+
             wp_reset_postdata();
 
             return [
                 'categories' => $unique_categories,
-                'ids'        => $project_ids,
-                'cat_counts' => $category_counts
+                'ids' => $project_ids,
+                'cat_counts' => $category_counts,
             ];
         }
+    }
+
+    /**
+     * Determine the Bootstrap class for a given index.
+     *
+     * @param int $index The index to determine the class for.
+     * @return string The Bootstrap class for the given index.
+     */
+    public function Bootstrap_Class($index = 1) {
+        $class = '';
+        if ($index === 2 || $index === 7 || $index === 10) {
+            $class = 'col-lg-8';
+        } elseif ($index % 3 === 0 && $index != 9 && $index != 12) {
+            $class = 'col-lg-8';
+        } else {
+            $class = 'col-lg-4';
+        }
+
+        return $class;
     }
 }
