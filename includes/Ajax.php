@@ -29,8 +29,8 @@ class Ajax{
     public function load_more(){
         $component = new Component();
 
-        $offset = isset( $_POST['offset']) ? intval( $_POST['offset']) : 6;
-        $posts_to_show = isset( $_POST['posts_to_show']) ? intval( $_POST['posts_to_show']) : 6;
+        $offset = isset( $_POST['offset']) ? intval( $_POST['offset']) : 15;
+        $posts_to_show = isset( $_POST['posts_to_show']) ? intval( $_POST['posts_to_show']) : -1;
     
         $args = array(
             'post_type'      => 'portfolio_project',
@@ -43,16 +43,17 @@ class Ajax{
     
         if ($project->have_posts()) {
             ob_start();
-    
             while ($project->have_posts()) {
                 $show_gallery_thumbanil = get_option( 'portfolio_show_gallery_thumbnail', true );
                 $project->the_post();
                 $terms = get_the_terms(get_the_ID(), 'project_cat');
+               
     
                 if ( ! empty( $terms) && !is_wp_error( $terms ) ) {
                     foreach ( $terms as $term ) { ?>
                         <!-- // Your existing HTML code for displaying project posts goes here -->
                     <div class="<?php echo $component->Bootstrap_Class() . ' ' . esc_attr( $term->slug ); ?>">
+                    
                             <div class="portfolio-single-project">
                                 <a class="data-fancybox-trigger"
                                 <?php echo $show_gallery_thumbanil ? 'data-fancybox="gallery"' : 'data-fancybox'; ?>
@@ -72,17 +73,11 @@ class Ajax{
     
             wp_reset_postdata();
             $response = ob_get_clean();
-    
-            // Check if there are more posts to show
-            if ($project->found_posts - ($offset + $posts_to_show) <= 0) {
-                $response = ''; // Return empty response to indicate no more posts
-            }
         } else {
             $response = _e( 'No projects found.', 'wp-project-portfolio' );
         }
-    
-        echo $response;
-        wp_die();
+        
+        wp_die( $response );
     }
 
      /**

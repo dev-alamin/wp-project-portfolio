@@ -76,7 +76,7 @@ class Save_Settings {
 
         add_settings_field(
             'portfolio-show-portfolio-number',
-            __( 'Show Gallery Thumbnail', 'wp-project-portfolio' ),
+            __( 'Number of Portfolios', 'wp-project-portfolio' ),
             [ $this, 'render_show_number_portfolio' ],
             'portfolio-settings-group',
             'portfolio-general'

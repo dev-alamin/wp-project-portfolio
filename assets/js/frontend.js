@@ -28,60 +28,74 @@ jQuery(document).ready(function($) {
         $(this).addClass('active');
         });   
 
+
         var postsToShow = 10; // Number of posts to show per click
         var offset = 15; // Initial offset for fetching posts
         var $loadMoreButton = $('#load-more-button');
-        // Function to load more posts
-        function loadMorePosts() {
-            $.ajax({
-                url: portofolioObject.adminUrl,
-                type: 'POST',
-                data: {
-                    action: 'wp_project_portfolio', // The PHP function to handle the request
-                    offset: offset,
-                    posts_to_show: postsToShow,
-                    nonce: portofolioObject.none,
-                },
-                beforeSend: function(xhr) {
-                    // Set the nonce in the AJAX request headers
-                    xhr.setRequestHeader('X-WP-Nonce', portofolioObject.nonce);
-                    $loadMoreButton.text('Loading...'); // Show loading text on the button
-                },
-                success: function(response) {
-                    if (response) {
-                      var $newPosts = $(response); // Convert the response HTML to jQuery object
-                      $('.project-content').append($newPosts); // Append the new posts after the existing ones
-                      offset += postsToShow;
-            
-                      // Check if there are more posts to show
-                      if (response.trim() === '') {
-                        $loadMoreButton.remove(); // No more posts to show, remove the load more button
-                      } else {
-                        $loadMoreButton.text('Load More'); // Restore the button text
-                      }
-            
-                      // Reload Isotope items and re-layout
-                      $('.project-content').isotope('appended', $newPosts).isotope('layout');
-                      $(window).trigger('resize');
-                    } else {
-                      $loadMoreButton.remove(); // No more posts to show, remove the load more button
+
+// Function to load more posts
+function loadMorePosts() {
+    $.ajax({
+        url: portofolioObject.adminUrl,
+        type: 'POST',
+        dataType:'html',
+        data: {
+            action: 'wp_project_portfolio', // The PHP function to handle the request
+            offset: offset,
+            posts_to_show: postsToShow,
+            nonce: portofolioObject.none,
+        },
+        beforeSend: function(xhr) {
+            // Set the nonce in the AJAX request headers
+            xhr.setRequestHeader('X-WP-Nonce', portofolioObject.nonce);
+            $loadMoreButton.text('Loading...'); // Show loading text on the button
+        },
+        success: function(response) {
+            if (response) {
+                var $newPosts = $(response); // Convert the response HTML to jQuery object
+                $('.project-content').append($newPosts); // Append the new posts after the existing ones
+                offset += postsToShow;
+
+                // Calculate the total number of posts and remaining posts
+                var totalPosts = parseInt(portofolioObject.totalPosts);
+                var remainingPosts = totalPosts - offset;
+
+                // Update the button text based on remaining posts
+                if (remainingPosts <= 0) {
+                    $loadMoreButton.remove(); // No more posts to show, remove the load more button
+                } else {
+                    var buttonText = 'Load More';
+                    if (remainingPosts < postsToShow) {
+                        postsToShow = remainingPosts; // Update the value to match the remaining posts
+                        console.log('remaining' + postsToShow );
+                        buttonText += ' (' + remainingPosts + ' remaining)';
                     }
-                  },
-                error: function(errorThrown) {
-                    console.log(' Error: ' + errorThrown);
+                    $loadMoreButton.text(buttonText); // Update the button text
                 }
-            });
-        }
 
-        // Load more button click event
-        $('#load-more-button').on('click', function() {
-            loadMorePosts();
-        });
-
-        // Initially hide the "Load More" button if there are no more posts
-        if ($('#project-content').children().length < postsToShow) {
-            $('#load-more-button').hide();
+                // Reload Isotope items and re-layout
+                $('.project-content').isotope('appended', $newPosts).isotope('layout');
+                $(window).trigger('resize');
+            } else {
+                //   $loadMoreButton.remove(); // No more posts to show, remove the load more button
+            }
+        },
+        error: function(errorThrown) {
+            console.log(' Error: ' + errorThrown);
         }
+    });
+}
+
+// Load more button click event
+$('#load-more-button').on('click', function() {
+    loadMorePosts();
+});
+
+// Initially hide the "Load More" button if there are no more posts
+if ($('#project-content').children().length < postsToShow) {
+    $('#load-more-button').hide();
+}
+
 
     // Function to handle sorting
     function sortProjects(sortOrder) {

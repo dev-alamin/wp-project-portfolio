@@ -124,8 +124,9 @@ class Assets {
 
             wp_localize_script('portfolio-script', 'portofolioObject', array(
                 'uniqueClassSlugs' => array_keys($unique_categories),
-                'adminUrl'      => admin_url('admin-ajax.php'),
-                'nonce' => wp_create_nonce( 'project_porfoltio_nonce'),
+                'adminUrl'         => admin_url('admin-ajax.php'),
+                'nonce'            => wp_create_nonce( 'project_porfoltio_nonce'),
+                'totalPosts'        => wp_count_posts( 'portfolio_project' )->publish,
             ));
         }
     }
