@@ -35,7 +35,7 @@ WP Project Portfolio is a WordPress plugin that allows you to create and manage 
 1. Create a new page or edit an existing one where you want to display the project portfolio.
 2. Add the following shortcode to the page content:
    ```
-   [project_portfolio]
+   [wp_project_portfolio]
    ```
 3. Save or update the page.
 4. Visit the page on the front end to see your project portfolio displayed in a grid layout.
