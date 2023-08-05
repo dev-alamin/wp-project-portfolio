@@ -133,3 +133,25 @@ body {
     background: black;
     color: #fff;
 }
+
+@media(max-width:768px){
+	select#sort-by-category, select#sort-by-title {
+    width: 100% !important;
+    display: block !important;
+    margin-bottom: 10px;
+}
+	.portfolio-single-project .thumb{
+		height:210px;
+	}
+	
+	.portfolio-single-project .text .project-title{
+		font-size:17px;
+	}
+	.portfolio-single-project .text p{
+		line-height:19px;
+	}
+	
+	.portfolio-single-project .text .open-popup{
+		margin-top:5px;
+	}
+}
