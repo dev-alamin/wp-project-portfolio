@@ -78,7 +78,7 @@ $project_ids = $loop['ids'];
                                 $category_count = $category_counts[$category_slug];
                                 if( $portfolio_number ) {
                                     echo '<button data-filter=".' . esc_attr( $category_slug ) . '">';
-                                    esc_html_e( $category_name . ' - ' . $category_count );
+                                    esc_html_e( $category_name . '(' . $category_count . ')' );
                                     echo '</button>';
                                 }else{
                                     echo '<button data-filter=".' . esc_attr( $category_slug ) . '">';
@@ -113,10 +113,10 @@ $project_ids = $loop['ids'];
                                     <?php 
                                     $post = get_post($project_id);
                                     setup_postdata($post); ?>
-                                    <a class="data-fancybox-trigger" <?php echo $show_gallery_thumbanil ? 'data-fancybox="gallery"' : 'data-fancybox'; ?> href="<?php echo esc_url(get_the_post_thumbnail_url(get_the_ID(), 'large')); ?>" data-caption='<?php echo $component->caption(); ?>'>
+                                    <a class="data-fancybox-trigger" <?php echo $show_gallery_thumbanil ? 'data-fancybox="gallery"' : 'data-fancybox'; ?> href="<?php echo esc_url(get_the_post_thumbnail_url(get_the_ID(), 'large')); ?>" data-caption='<?php echo $component->caption( get_the_ID()); ?>'>
                                         <?php
-                                            echo $component->content(); // Hover content
-                                            echo $component->thumbnail(); // Thumbnail ?>
+                                            echo $component->content( get_the_ID() ); // Hover content
+                                            echo $component->thumbnail( get_the_ID() ); // Thumbnail ?>
                                     </a>
 
                                 </div>

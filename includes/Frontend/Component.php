@@ -7,10 +7,10 @@ class Component{
      *
      * @return string The caption HTML.
      */
-    public function caption(): string{
-        $caption = '<h4>' .esc_html__( get_the_title(get_the_ID() ) ) . '</h4>';
-        $caption .= '<p>' . esc_html__($this->short_description( 50 ) );
-        $caption .= '<a class="readmore" href="' . esc_url( get_the_permalink(get_the_ID() ) ) . '">';
+    public function caption( $id ): string{
+        $caption = '<h4>' .esc_html__( get_the_title( $id ) ) . '</h4>';
+        $caption .= '<p>' . esc_html__($this->short_description( $id, 50 ) );
+        $caption .= '<a class="readmore" href="' . esc_url( get_the_permalink( $id ) ) . '">';
         $caption .= __( 'Read more', 'wp-project-portfolio' );
         $caption .= '</a>';
         return $caption;
@@ -22,9 +22,8 @@ class Component{
      * @param integer $words
      * @return string
      */
-    private function short_description( int $words = 10 ): string {
-        $remove_cont_tags = wp_strip_all_tags( get_the_content() );
-        $shorter_cont = wp_trim_words( $remove_cont_tags, $words, '' );
+    private function short_description( int $id, int $words ): string {
+        $shorter_cont = wp_trim_words( get_the_excerpt( $id ), $words, null );
 
         return $shorter_cont;
     }
@@ -35,10 +34,10 @@ class Component{
      * @param string $shorter_cont The shorter content to display.
      * @return string The content HTML.
      */
-    public function content(){
+    public function content( $id ){
         $content = '<div class="text">';
-        $content .= '<h4 class="project-title">' . get_the_title(get_the_ID()) . '</h4>';
-        $content .= '<p>' . esc_html__( $this->short_description() ) . '</p>';
+        $content .= '<h4 class="project-title">' . get_the_title( $id ) . '</h4>';
+        $content .= '<p>' . esc_html__( $this->short_description( $id, 20 ) ) . '</p>';
         $content .= '<span class="open-popup">' . __('View', 'wp-project-portfolio') . '</span>';
         $content .= '</div>';
         return $content;
@@ -49,8 +48,8 @@ class Component{
      *
      * @return string The thumbnail HTML.
      */
-    public function thumbnail(){
-        $thumbnail = '<div class="thumb" style="background-image: url(' . get_the_post_thumbnail_url(get_the_ID(), 'large') . ');"></div>';
+    public function thumbnail( $id ){
+        $thumbnail = '<div class="thumb" style="background-image: url(' . get_the_post_thumbnail_url( $id , 'large') . ');"></div>';
         return $thumbnail;
     }
 
@@ -137,13 +136,13 @@ class Component{
                 $project_ids[] = get_the_ID();
             }
 
-            wp_reset_postdata();
-
+            
             return [
                 'categories' => $unique_categories,
                 'ids' => $project_ids,
                 'cat_counts' => $category_counts,
             ];
+            wp_reset_postdata();
         }
     }
 
@@ -174,9 +173,9 @@ class Component{
                 }
             }
 
-            wp_reset_postdata();
-
+            
             return $category_counts;
+            wp_reset_postdata();
         }
     }
 

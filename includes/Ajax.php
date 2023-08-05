@@ -57,10 +57,10 @@ class Ajax{
                                 <a class="data-fancybox-trigger"
                                 <?php echo $show_gallery_thumbanil ? 'data-fancybox="gallery"' : 'data-fancybox'; ?>
                                 href="<?php echo esc_url( get_the_post_thumbnail_url(get_the_ID(), 'large') ); ?>" 
-                                data-caption='<?php echo $component->caption(); ?>'>
+                                data-caption='<?php echo $component->caption( get_the_ID() ); ?>'>
                                     <?php 
-                                    echo $component->content();
-                                    echo $component->thumbnail();
+                                    echo $component->content( get_the_ID() );
+                                    echo $component->thumbnail( get_the_ID() );
                                     ?>
                                 </a>
 
@@ -137,10 +137,10 @@ class Ajax{
                                 <a class="data-fancybox-trigger"
                                     <?php echo $show_gallery_thumbanil ? 'data-fancybox="gallery"' : 'data-fancybox'; ?>
                                     href="<?php echo esc_url( get_the_post_thumbnail_url(get_the_ID(), 'large') ); ?>" 
-                                    data-caption='<?php echo $component->caption(); ?>'>
+                                    data-caption='<?php echo $component->caption( get_the_ID() ); ?>'>
                                     <?php 
-                                    echo $component->content();
-                                    echo $component->thumbnail();
+                                    echo $component->content( get_the_ID() );
+                                    echo $component->thumbnail( get_the_ID() );
                                     ?>
                                 </a>
                             </div>
@@ -152,10 +152,10 @@ class Ajax{
                                 <a class="data-fancybox-trigger"
                                     <?php echo $show_gallery_thumbanil ? 'data-fancybox="gallery"' : 'data-fancybox'; ?>
                                     href="<?php echo esc_url( get_the_post_thumbnail_url(get_the_ID(), 'large') ); ?>" 
-                                    data-caption='<?php echo $component->caption(); ?>'>
+                                    data-caption='<?php echo $component->caption( get_the_ID() ); ?>'>
                                     <?php 
-                                    echo $component->content();
-                                    echo $component->thumbnail();
+                                    echo $component->content( get_the_ID() );
+                                    echo $component->thumbnail( get_the_ID() );
                                     ?>
                                 </a>
                             </div>

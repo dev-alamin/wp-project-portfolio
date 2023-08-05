@@ -43,11 +43,6 @@ class Assets {
                 'version' => fileatime( WPPP_PLUGIN_PATH . 'assets/js/isotope.pkgd.min.js' ),
                 'deps'    => [ 'jquery' ],
             ],
-            // 'fancybox-umd-script' => [
-            //     'src'     => WPPP_PLUGIN_URL . 'assets/js/jquery-ui.min.js',
-            //     'version' => fileatime( WPPP_PLUGIN_PATH . 'assets/js/jquery-ui.min.js' ),
-            //     'deps'    => [ 'jquery' ],
-            // ],
             'portfolio-script' => [
                 'src'     => WPPP_PLUGIN_URL . 'assets/js/frontend.js',
                 'version' => fileatime( WPPP_PLUGIN_PATH . 'assets/js/frontend.js' ),
@@ -90,7 +85,7 @@ class Assets {
         $scripts = $this->get_scripts();
         $styles  = $this->get_styles();
 
-        if( get_post_type() === $cpt || is_page_template( 'project-template.php' )  ) {
+        if( get_post_type() === $cpt || is_page_template( 'project-template.php' ) || has_shortcode( get_the_content(), 'wp_project_portfolio')  ) {
             foreach ( $scripts as $handle => $script ) {
                 $deps = isset( $script['deps'] ) ? $script['deps'] : false;
                 
