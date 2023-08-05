@@ -44,27 +44,30 @@ body {
     font-size: 1.2rem;
   }
   
-
   .portfolio-single-project {
     position: relative;
     margin-bottom: 20px;
+    overflow: hidden;
 }
 
 .portfolio-single-project .text {
     position: absolute;
-    height:0;
+    top: 0;
+    left: 0;
     width: 100%;
-    background: rgba(0,0,0,0.5);
+    height: 100%;
+    background: linear-gradient(-180deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0) 100%);
     text-align: center;
     padding: 10px;
-    transition: .4s;
-    overflow: hidden;
-    padding: 0;
+    transition: 0.4s;
+    color: white;
+    opacity: 0;
 }
+
 .portfolio-single-project:hover .text {
-    height: 100%;
-    padding: 10px;
+    opacity: 1;
 }
+
 .portfolio-single-project .text .project-title{
     color: #fff;;
 }
@@ -124,4 +127,9 @@ body {
 .fancybox__caption p {
     max-width: 1200px;
     padding: 0 20px;
+}
+
+#load-more-button {
+    background: black;
+    color: #fff;
 }

@@ -133,33 +133,30 @@ jQuery(document).ready(function($) {
     }
     
 
-    // Function to handle filtering
     function filterProjects(categorySlug) {
+        var $projectContent = $('#project-content');
+        var postsPerPage = 10; // Set the desired number of posts per page
+    
         $.ajax({
             url: portofolioObject.adminUrl, // WordPress AJAX URL
             type: 'POST',
             data: {
                 action: 'filter_projects',
-                category_slug: categorySlug
+                category_slug: categorySlug,
+                posts_per_page: postsPerPage // Pass the posts_per_page parameter
             },
             success: function (response) {
                 if (response) {
                     var $newItems = $(response); // Convert the response to jQuery object
-                    var $projectContent = $('#project-content');
-                    $projectContent.html($newItems); // Replace the existing content with the new items
-                    $projectContent.isotope('destroy'); // Destroy the previous Isotope instance
-                    $projectContent.isotope({ // Create a new Isotope instance
-                        itemSelector: '.col-lg-4',
-                        percentPosition: true,
-                        masonry: {
-                            columnWidth: '.col-lg-4'
-                        }
-                    });
+                    $projectContent.isotope('remove', $projectContent.children());
+                    $projectContent.append($newItems); // Append new items to the content
+                    $projectContent.isotope('insert', $newItems); // Isotope insert method
                     $(window).trigger('resize');
                 }
             }
         });
     }
+    
 
 
     // Sort by title select change event

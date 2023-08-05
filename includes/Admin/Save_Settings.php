@@ -11,11 +11,13 @@ class Save_Settings {
      * Register portfolio settings and sections.
      */
     public function register_portfolio_settings() {
-        register_setting( 'portfolio-settings-group', 'portfolio_page_title' );
+        register_setting( 'portfolio-settings-group', 'portfolio_title' );
         register_setting( 'portfolio-settings-group', 'portfolio_subtitle' );
         register_setting( 'portfolio-settings-group', 'portfolio_equal_width' );
         register_setting( 'portfolio-settings-group', 'portfolio_show_sort' );
         register_setting( 'portfolio-settings-group', 'portfolio_show_filter' );
+        register_setting( 'portfolio-settings-group', 'portfolio_show_gallery_thumbnail' );
+        register_setting( 'portfolio-settings-group', 'portfolio_show_numbers' );
 
         add_settings_section(
             'portfolio-general',
@@ -27,7 +29,7 @@ class Save_Settings {
         add_settings_field(
             'portfolio-page-title',
             __( 'Page Title', 'wp-project-portfolio' ),
-            [ $this, 'render_page_title_field' ],
+            [ $this, 'render_title_field' ],
             'portfolio-settings-group',
             'portfolio-general'
         );
@@ -63,6 +65,22 @@ class Save_Settings {
             'portfolio-settings-group',
             'portfolio-general'
         );
+
+        add_settings_field(
+            'portfolio-show-gallery-thumbnail',
+            __( 'Show Gallery Thumbnail', 'wp-project-portfolio' ),
+            [ $this, 'render_gallery_thumbnail_field' ],
+            'portfolio-settings-group',
+            'portfolio-general'
+        );
+
+        add_settings_field(
+            'portfolio-show-portfolio-number',
+            __( 'Show Gallery Thumbnail', 'wp-project-portfolio' ),
+            [ $this, 'render_show_number_portfolio' ],
+            'portfolio-settings-group',
+            'portfolio-general'
+        );
     }
 
     /**
@@ -75,9 +93,9 @@ class Save_Settings {
     /**
      * Render the page title field.
      */
-    public function render_page_title_field() {
-        $title = get_option( 'portfolio_page_title', '' );
-        echo '<input type="text" name="portfolio_page_title" value="' . esc_attr( $title ) . '" class="regular-text">';
+    public function render_title_field() {
+        $title = get_option( 'portfolio_title', '' );
+        echo '<input type="text" name="portfolio_title" value="' . esc_attr( $title ) . '" class="regular-text">';
     }
 
     /**
@@ -85,7 +103,7 @@ class Save_Settings {
      */
     public function render_subtitle_field() {
         $subtitle = get_option( 'portfolio_subtitle', '' );
-        echo '<input type="text" name="portfolio_subtitle" value="' . esc_attr( $subtitle ) . '" class="regular-text">';
+        echo '<textarea rows="10" cols="50" name="portfolio_subtitle" class="large-tex">'. esc_html( $subtitle ) .'</textarea>';
     }
 
     /**
@@ -110,5 +128,21 @@ class Save_Settings {
     public function render_show_filter_field() {
         $show_filter = get_option( 'portfolio_show_filter', true );
         echo '<label><input type="checkbox" name="portfolio_show_filter" value="1" ' . checked( $show_filter, true, false ) . '> ' . __( 'Show filter option', 'wp-project-portfolio' ) . '</label>';
+    }
+
+    /**
+    * Render the show filter option field.
+    */
+    public function render_gallery_thumbnail_field() {
+        $show_gallery_thumbanil = get_option( 'portfolio_show_gallery_thumbnail', true );
+        echo '<label><input type="checkbox" name="portfolio_show_gallery_thumbnail" value="1" ' . checked( $show_gallery_thumbanil, true, false ) . '> ' . __( 'Show gallery thumbnail', 'wp-project-portfolio' ) . '</label>';
+    }
+
+    /**
+    * Render the show filter option field.
+    */
+    public function render_show_number_portfolio() {
+        $show_portfolio_number = get_option( 'portfolio_show_numbers', true );
+        echo '<label><input type="checkbox" name="portfolio_show_numbers" value="1" ' . checked( $show_portfolio_number, true, false ) . '> ' . __( 'Show number of portfolios on header buttons', 'wp-project-portfolio' ) . '</label>';
     }
 }

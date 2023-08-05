@@ -45,6 +45,7 @@ class Ajax{
             ob_start();
     
             while ($project->have_posts()) {
+                $show_gallery_thumbanil = get_option( 'portfolio_show_gallery_thumbnail', true );
                 $project->the_post();
                 $terms = get_the_terms(get_the_ID(), 'project_cat');
     
@@ -54,7 +55,7 @@ class Ajax{
                     <div class="<?php echo $component->Bootstrap_Class() . ' ' . esc_attr( $term->slug ); ?>">
                             <div class="portfolio-single-project">
                                 <a class="data-fancybox-trigger"
-                                data-fancybox
+                                <?php echo $show_gallery_thumbanil ? 'data-fancybox="gallery"' : 'data-fancybox'; ?>
                                 href="<?php echo esc_url( get_the_post_thumbnail_url(get_the_ID(), 'large') ); ?>" 
                                 data-caption='<?php echo $component->caption(); ?>'>
                                     <?php 
@@ -89,60 +90,87 @@ class Ajax{
      */
     public function filter_projects() {
         $component = new Component();
-
+    
         $category_slug = isset($_POST['category_slug']) ? $_POST['category_slug'] : 'all';
+        $posts_per_page = isset($_POST['posts_per_page']) ? intval($_POST['posts_per_page']) : -1; // Get the posts_per_page value
+        $offset = isset($_POST['offset']) ? intval($_POST['offset']) : 0; // Get the offset value
 
-        $args = array(
-            'post_type'      => 'portfolio_project',
-            'post_status'    => 'publish',
-            'posts_per_page' => -1,
-            'tax_query' => array(
-                array(
-                    'taxonomy' => 'project_cat',
-                    'field' => 'slug',
-                    'terms' => $category_slug,
+        if( 'all' == $category_slug ) {
+            $args = array(
+                'post_type'      => 'portfolio_project',
+                'post_status'    => 'publish',
+                'posts_per_page' => $posts_per_page,
+                'offest'        => $offset,
+            );
+        }else{
+            $args = array(
+                'post_type'      => 'portfolio_project',
+                'post_status'    => 'publish',
+                'posts_per_page' => $posts_per_page,
+                'offest'        => $offset,
+                'tax_query' => array(
+                    array(
+                        'taxonomy' => 'project_cat',
+                        'field' => 'slug',
+                        'terms' => $category_slug,
+                    ),
                 ),
-            ),
-        );
+            );
+        }
+        
 
-
+    
         $project = new \WP_Query( $args );
-
+    
         if ($project->have_posts()) {
             ob_start();
-
+    
             while ($project->have_posts()) {
+                $show_gallery_thumbanil = get_option( 'portfolio_show_gallery_thumbnail', true );
                 $project->the_post();
                 $terms = get_the_terms(get_the_ID(), 'project_cat');
     
                 if (!empty($terms) && !is_wp_error($terms)) {
                     foreach ($terms as $term) { ?>
-                        <!-- // Your existing HTML code for displaying project posts goes here -->
-                    <div class="<?php echo $component->Bootstrap_Class() . ' ' . esc_attr( $term->slug ); ?>">
+                        <div class="<?php echo $component->Bootstrap_Class() . ' ' . esc_attr( $term->slug ); ?>">
                             <div class="portfolio-single-project">
                                 <a class="data-fancybox-trigger"
-                                data-fancybox
-                                href="<?php echo esc_url( get_the_post_thumbnail_url(get_the_ID(), 'large') ); ?>" 
-                                data-caption='<?php echo $component->caption(); ?>'>
+                                    <?php echo $show_gallery_thumbanil ? 'data-fancybox="gallery"' : 'data-fancybox'; ?>
+                                    href="<?php echo esc_url( get_the_post_thumbnail_url(get_the_ID(), 'large') ); ?>" 
+                                    data-caption='<?php echo $component->caption(); ?>'>
                                     <?php 
                                     echo $component->content();
                                     echo $component->thumbnail();
                                     ?>
                                 </a>
-
                             </div>
                         </div>
                 <?php }
-                }
+                }else{ ?>
+                        <div class="<?php echo $component->Bootstrap_Class() . ' ' . esc_attr( $term->slug ); ?>">
+                            <div class="portfolio-single-project">
+                                <a class="data-fancybox-trigger"
+                                    <?php echo $show_gallery_thumbanil ? 'data-fancybox="gallery"' : 'data-fancybox'; ?>
+                                    href="<?php echo esc_url( get_the_post_thumbnail_url(get_the_ID(), 'large') ); ?>" 
+                                    data-caption='<?php echo $component->caption(); ?>'>
+                                    <?php 
+                                    echo $component->content();
+                                    echo $component->thumbnail();
+                                    ?>
+                                </a>
+                            </div>
+                        </div>
+                <?php }; 
             }
-
+    
             wp_reset_postdata();
             $response = ob_get_clean();
         } else {
             $response = _e( 'No projects found.', 'wp-project-portfolio' );
         }
-
+    
         echo $response;
         wp_die();
     }
+    
 }

@@ -62,7 +62,8 @@ class Component{
     public function filter() {
         ?>
         <select id="sort-by-category" class="form-select w-25 d-inline" aria-label="<?php _e( 'Default select', 'wp-project-portfolio' ); ?>">
-            <option selected value="all"><?php _e( 'All Categories', 'wp-project-portfolio' ); ?></option>
+        <option selected><?php _e( 'Filter by category', 'wp-project-portfolio' ); ?></option>    
+        <option value="all"><?php _e( 'All Categories', 'wp-project-portfolio' ); ?></option>
 
             <?php
             $categories = get_terms(
@@ -143,6 +144,39 @@ class Component{
                 'ids' => $project_ids,
                 'cat_counts' => $category_counts,
             ];
+        }
+    }
+
+    public function cat_counts() {
+        $args = array(
+            'post_type'      => 'portfolio_project',
+            'post_status'    => 'publish',
+            'posts_per_page' => -1,
+        );
+
+        $project = new \WP_Query($args);
+
+        $category_counts = [];
+
+        if ( $project->have_posts() ) {
+            while ( $project->have_posts() ) {
+                $project->the_post();
+                $terms = get_the_terms(get_the_ID(), 'project_cat');
+
+                if ( ! empty( $terms ) && !is_wp_error( $terms ) ) {
+                    foreach ( $terms as $term ) {
+                        if ( isset( $category_counts[$term->slug ])) {
+                            $category_counts[$term->slug]++;
+                        } else {
+                            $category_counts[$term->slug] = 1;
+                        }
+                    }
+                }
+            }
+
+            wp_reset_postdata();
+
+            return $category_counts;
         }
     }
 
